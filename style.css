@@ -4,6 +4,12 @@
     box-sizing: border-box;
 }
 
+body {
+    background-size: 6px;
+    background-image: url(./misc-images/placeholder.png); 
+    /* placeholder background image */
+}
+
 #container {
     display: flex;
     justify-content: center;
