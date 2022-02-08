@@ -1,41 +1,41 @@
 // NEEDS TO BE REDONE FOR SQUARES INSTEAD OF CIRCLES + CREATE NEW SYSTEM FOR KNOCKBACK AND GRAVITY
-
-
-function calcObjects(a) {
+// https://www.grc.nasa.gov/WWW/k-12/airplane/drageq.html ? will probably work with some tweaking
+// maybe more knockback upwards and a bit less to the sides so you can more easily chain attacks by hitting them when they fall down again ?
+let Cd = 0.5; // experiment with value of Cd to get good drag later
+let Density = 1.1; // tweak this too
+let grav = 5; // also tweak this
+function calculatePhysics(a = []) {
     // a = array
+
+    
     for (let i = 0; i < a.length; i++) {
-        a[i].Fx = -0.5 * 0.47 * Math.PI * a[i].r * a[i].r / (10000) * 1.22 * a[i].vx * a[i].vx / a[i].vx;
-        a[i].Fy = -0.5 * 0.47 * Math.PI * a[i].r * a[i].r / (10000) * 1.22 * a[i].vy * a[i].vy / Math.abs(a[i].vy);
+        a[i].Fx = Cd * ((Density * a[i].Vx) / 2) * (a[i].width * a[i].height);
+        a[i].Fy = Cd * ((Density * a[i].Vy) / 2) * (a[i].width * a[i].height);
 
 
 
-        // Fx = (isNaN(Fx) ? 0 : Fx);
-        // Fy = (isNaN(Fy) ? 0 : Fy);
 
-        a[i].vx += a[i].Fx / a[i].m;
-        a[i].vy += gravity + (a[i].Fy / a[i].m);
+        a[i].vx += a[i].Fx;
+        a[i].vy += grav + a[i].Fy;
 
 
         a[i].y += a[i].vy;
         a[i].x += a[i].vx;
 
-        // right wall
-        if (a[i].x + a[i].r >= canvas.width) {
-            a[i].x = canvas.width - a[i].r;
-            a[i].vx = -a[i].vx * a[i].b;
-        } else if (a[i].x - a[i].r <= 0) {
-            a[i].x = a[i].r;
-            a[i].vx = -a[i].vx * a[i].b;
+        // boundaries right / left
+        // TWEAK THIS TOO!
+        if (a[i].x + a[i].width >= 1000) {
+            a[i].x = 1000 - a[i].r;
+            a[i].Vx = -a[i].Vx * 0; // only keeping the bounce if needed for later but for now its multiplied by zero
+        } else if (a[i].x - a[i].width <= 0) {
+            a[i].x = a[i].width;
+            a[i].Vx = -a[i].Vx * 0;
         }
         //floor
-        if (a[i].y + a[i].r >= canvas.height) {
-            a[i].y = canvas.height - a[i].r;
-            a[i].vy = -a[i].vy * a[i].b;
+        if (a[i].y + a[i].height >= canvas.height) {
+            a[i].y = canvas.height - a[i].height;
+            a[i].Vy = -a[i].Vy * 0; // maybe add bounce IF knocked out or whatever 
         };
 
-        // a.forEach(e => {
-        //     console.log("a")
-        //     console.log(cirCollision(a[i].x, a[i].y, a[i].r, e.x, e.y, e.r));
-        // });
     }
 }

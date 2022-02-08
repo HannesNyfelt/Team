@@ -7,14 +7,17 @@
 //  Ax/Ay is attack hitbox size
 //  damage is how much damage is dealt per attack (could be random within range ? or if on low health does more ? not added yet)
 //  knockback is the modifier on deafult knockback ( 2 would be double the deafult knockback )
-//  knockbackResistance is the modifier on knockback taken (1 would be zero knockback, 0.5 would be half)
+//  knockbackMult is the modifier on knockback taken (1 would be zero knockback, 0.5 would be half)
 //  speed is default speed (could be modified with ?? maybe random powerups or w/e)
 //  jumpHeight is default jump height (could also be modified with random powerups? maybe jetpacks? double jump?)
 //  health is default health (maybe default player attack does 1 damage and health of normal enemy would be 2/3? )
 class Creature {
-    constructor(x,y,width,height,sprite,AxOffset,AyOffset,Ax,Ay,damage,knockback,knockbackResistance,speed,jumpHeight,health) {
+    constructor(x,y,width,height,sprite,AxOffset,AyOffset,Ax,Ay,damage,knockback,knockbackMult,speed,jumpHeight,health) {
         this.x = x;
         this.y = y;
+        this.Vx= 0; // won't need to change velocity at spawn ?
+        this.Vy= 0;
+        this.sprite = array[sprite].sprite;  // make an array with objects for each sprite with basic things like what sprite it uses and other things 
         this.width = width;
         this.height = height;
         this.sprite = sprite;
@@ -24,7 +27,7 @@ class Creature {
         this.Ay = Ay;
         this.damage = damage;
         this.knockback = knockback;
-        this.knockbackResistance = knockbackResistance;
+        this.knockbackMult = knockbackMult;
         this.speed = speed;
         this.jumpHeight = jumpHeight;
         this.health = health;
