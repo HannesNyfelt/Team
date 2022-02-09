@@ -1,3 +1,10 @@
+let canvas = document.querySelector('canvas');
+let ctx = canvas.getContext('2d');
+canvas.width = 960;
+canvas.height = 720;
+canvasW = canvas.width;
+canvasH = canvas.height;
+
 // new class for generic object person thing umm
 
 //  x/y position for initial spawn
@@ -17,7 +24,7 @@ class Creature {
         this.y = y;
         this.Vx= 0; // won't need to change velocity at spawn ?
         this.Vy= 0;
-        this.sprite = array[sprite].sprite;  // make an array with objects for each sprite with basic things like what sprite it uses and other things 
+        //this.sprite = array[sprite].sprite;  // make an array with objects for each sprite with basic things like what sprite it uses and other things 
         this.width = width;
         this.height = height;
         this.sprite = sprite;
@@ -33,3 +40,23 @@ class Creature {
         this.health = health;
     }
 }
+// Very Incredibly temporary physics test
+let test = [
+    new Creature(0,80,10,10,0,0,0,0,0,10,1,1,1,1,3),
+    new Creature(0,60,10,10,0,0,0,0,0,10,1,1,1,1,3),
+    new Creature(0,40,10,10,0,0,0,0,0,10,1,1,1,1,3),
+    new Creature(0,20,10,10,0,0,0,0,0,10,1,1,1,1,3),
+    new Creature(0,0,10,10,0,0,0,0,0,10,1,1,1,1,3)
+]
+
+let gameloop = setInterval(() => {
+    calculatePhysics(test);
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = "#000000";
+    test.forEach(e => {
+        ctx.fillRect(e.x,e.y,e.width,e.height)
+    });
+}, 16.66);
+
+gameloop;
