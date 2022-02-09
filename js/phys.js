@@ -3,7 +3,7 @@
 // maybe more knockback upwards and a bit less to the sides so you can more easily chain attacks by hitting them when they fall down again ?
 let Cd = 0.102; // experiment with value of Cd to get good drag later
 let Density = 0.2; // tweak this too
-let grav = 1; // also tweak this
+let grav = 2; // also tweak this
 export function calculateArray(a = []) {
     // a = array
     a.forEach(element => {
@@ -15,7 +15,7 @@ export function calcPhysics(e) {
     // ok this  is just accelerating it to infinity // needs tweaking // Cd is 0 right now to ignore this
     // e.Fx = Cd * ((Density * e.Vx) / 2) * (e.width * e.height);
     // e.Fy = Cd * ((Density * e.Vy) / 2) * (e.width * e.height);
-    e.Vx = e.Vx * 0.90;
+    e.Vx = e.Vx * (e.grounded ? 0.90 : 0.97);
     e.Vy = e.Vy * 0.99;
     e.Vy += grav;
 
@@ -37,7 +37,7 @@ export function calcPhysics(e) {
         e.y = canvas.height - e.height;
         if (e.y + e.height >= canvas.height) {
             e.y = canvas.height - e.height;
-            if (e.stunned = true) {
+            if (e.stunned == true) {
                 e.bounceFactor /= 1.3;
                 if (e.bounceFactor <= 0.1) {
                     e.bounceFactor = 0;

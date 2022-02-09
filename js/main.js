@@ -1,8 +1,9 @@
-let canvas = document.querySelector('canvas');
-let ctx = canvas.getContext('2d');
+export let canvas = document.querySelector('canvas');
+export let ctx = canvas.getContext('2d');
 canvas.width = 960;
 canvas.height = 720;
 
+import { drawSprite } from "./draw.js";
 import { calcPhysics, calculateArray } from "./phys.js";
 import { updatePlayer } from "./player.js";
 
@@ -56,7 +57,10 @@ let test = [
     new Creature(0, 20, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
     new Creature(0, 0, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3)
 ]
-let player = new Creature(0, 0, 20, 20, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3)
+
+window.test = test;
+
+let player = new Creature(0, 0, 40, 80, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3)
 
 
 let gameloop = setInterval(() => {
@@ -68,7 +72,9 @@ let gameloop = setInterval(() => {
         ctx.fillRect(e.x, e.y, e.width, e.height)
     });
     updatePlayer(player);
-    ctx.fillRect(player.x, player.y, player.width, player.height)
+    drawSprite(player);
+    ctx.fillStyle= "#000000";
+    // ctx.fillRect(player.x, player.y, player.width, player.height);
 }, 16.66);
 
 gameloop;
