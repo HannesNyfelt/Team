@@ -3,7 +3,8 @@ let ctx = canvas.getContext('2d');
 canvas.width = 960;
 canvas.height = 720;
 
-import { calculateArray } from "./phys.js";
+import { calcPhysics, calculateArray } from "./phys.js";
+import { updatePlayer } from "./player.js";
 
 // new class for generic object person thing umm
 
@@ -21,11 +22,11 @@ import { calculateArray } from "./phys.js";
 //  health is default health (maybe default player attack does 1 damage and health of normal enemy would be 2/3? )
 //  player is boolean 
 class Creature {
-constructor(x,y,width,height,sprite,hitOffsetX,hitOffsetY,AxOffset,AyOffset,Ax,Ay,damage,knockback,knockbackMult,speed,jumpHeight,health) {
+    constructor(x, y, width, height, sprite, hitOffsetX, hitOffsetY, AxOffset, AyOffset, Ax, Ay, damage, knockback, knockbackMult, speed, jumpHeight, health) {
         this.x = x;
         this.y = y;
-        this.Vx= 100; // won't need to change velocity at spawn ?
-        this.Vy= 0;
+        this.Vx = 100; // won't need to change velocity at spawn ?
+        this.Vy = 0;
         //this.sprite = array[sprite].sprite;  // make an array with objects for each sprite with basic things like what sprite it uses and other things 
         this.width = width;
         this.height = height;
@@ -48,21 +49,25 @@ constructor(x,y,width,height,sprite,hitOffsetX,hitOffsetY,AxOffset,AyOffset,Ax,A
 }
 // Very Incredibly temporary physics test
 let test = [
-    new Creature(0,80,10,10,0,0,0,0,0,10,1,1,1,1,1),
-    new Creature(0,60,10,10,0,0,0,0,0,10,1,1,1,1,3),
-    new Creature(0,40,10,10,0,0,0,0,0,10,1,1,1,1,3),
-    new Creature(0,20,10,10,0,0,0,0,0,10,1,1,1,1,3),
-    new Creature(0,0,10,10,0,0,0,0,0,10,1,1,1,1,3)
+    new Creature(0, 80, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
+    new Creature(0, 60, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
+    new Creature(0, 40, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
+    new Creature(0, 20, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
+    new Creature(0, 0, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3)
 ]
+let player = new Creature(0, 0, 20, 20, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3)
+
 
 let gameloop = setInterval(() => {
     calculateArray(test);
     ctx.fillStyle = "#FFFFFF";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#000000";
     test.forEach(e => {
-        ctx.fillRect(e.x,e.y,e.width,e.height)
+        ctx.fillRect(e.x, e.y, e.width, e.height)
     });
+    updatePlayer(player);
+    ctx.fillRect(player.x, player.y, player.width, player.height)
 }, 16.66);
 
 gameloop;
