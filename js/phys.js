@@ -25,17 +25,29 @@ export function calcPhysics(e) {
 
     // boundaries right / left
     // TWEAK THIS TOO!
-    if (e.x + e.width >= 600) {
-        e.x = 600 - e.Vx;
-        e.Vx = -e.Vx * 1; // only keeping the bounce if needed for later but for now its multiplied by zero
-    } else if (e.x - e.width <= 0) {
-        e.x = e.width;
-        e.Vx = -e.Vx * 1;
+    if (e.x + e.width >= 960) {
+        e.x = 960 - e.width;
+        e.Vx = -e.Vx * 0.5;
+    } else if (e.x <= 0) {
+        e.x = 0;
+        e.Vx = -e.Vx * 0.5;
     }
     //floor
     if (e.y + e.height >= canvas.height) {
         e.y = canvas.height - e.height;
-        e.Vy = -e.Vy * 0.5; // maybe add bounce IF knocked out or whatever 
+        if (e.y + e.height >= canvas.height) {
+            e.y = canvas.height - e.height;
+            if (e.stunned = true) {
+                e.bounceFactor /= 1.3;
+                if (e.bounceFactor <= 0.1) {
+                    e.bounceFactor = 0;
+                    e.stunned = false;
+            }
+            } else {
+                e.grounded = true;
+            }
+            e.Vy = -e.Vy * e.bounceFactor; 
+        }
     };
 
 }

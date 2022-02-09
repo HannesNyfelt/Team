@@ -44,6 +44,8 @@ class Creature {
         this.jumpHeight = jumpHeight;
         this.health = health;
         this.grounded = false;
+        this.stunned = false;
+        this.bounceFactor = 0;
     }
 }
 // Very Incredibly temporary physics test

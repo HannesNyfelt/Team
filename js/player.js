@@ -14,9 +14,9 @@ export function updatePlayer(player) {
     player.Vx += getKey(keyCodes.arrowLeft) ? -5 : 0;
     player.Vx += getKey(keyCodes.arrowRight) ? 5 : 0;
 
-    if (player.y > 450 - player.height) {
-        player.y = 450 - player.height;
-        player.Vy = 0;
-        player.grounded = true;
-    }
+    // if (player.y > 450 - player.height) {
+    //     player.y = 450 - player.height;
+    //     player.Vy = 0;
+    //     player.grounded = true;
+    // }
 }
