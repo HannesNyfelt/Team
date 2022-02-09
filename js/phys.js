@@ -35,7 +35,16 @@ export function calcPhysics(e) {
         //floor
         if (e.y + e.height >= canvas.height) {
             e.y = canvas.height - e.height;
-            e.Vy = -e.Vy * 0.5; // maybe add bounce IF knocked out or whatever 
+            if (e.stunned = true) {
+                e.bounceFactor /= 1.3;
+                if (e.bounceFactor <= 0.1) {
+                    e.bounceFactor = 0;
+                    e.stunned = false;
+            }
+            } else {
+                e.grounded = true;
+            }
+            e.Vy = -e.Vy * bounceFactor; // maybe add bounce IF knocked out or whatever 
         };
 
 }

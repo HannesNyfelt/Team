@@ -3,7 +3,7 @@ let ctx = canvas.getContext('2d');
 canvas.width = 960;
 canvas.height = 720;
 
-import { calculatePhysics } from "./phys.js";
+import { calculateArray } from "./phys.js";
 
 // new class for generic object person thing umm
 
@@ -43,11 +43,12 @@ constructor(x,y,width,height,sprite,hitOffsetX,hitOffsetY,AxOffset,AyOffset,Ax,A
         this.jumpHeight = jumpHeight;
         this.health = health;
         this.grounded = false;
+        this.stunned = false;
     }
 }
 // Very Incredibly temporary physics test
 let test = [
-    new Creature(0,80,10,10,0,0,0,0,0,10,1,1,1,1,3),
+    new Creature(0,80,10,10,0,0,0,0,0,10,1,1,1,1,1),
     new Creature(0,60,10,10,0,0,0,0,0,10,1,1,1,1,3),
     new Creature(0,40,10,10,0,0,0,0,0,10,1,1,1,1,3),
     new Creature(0,20,10,10,0,0,0,0,0,10,1,1,1,1,3),
@@ -55,7 +56,7 @@ let test = [
 ]
 
 let gameloop = setInterval(() => {
-    calculatePhysics(test);
+    calculateArray(test);
     ctx.fillStyle = "#FFFFFF";
     ctx.fillRect(0,0,canvas.width,canvas.height);
     ctx.fillStyle = "#000000";
