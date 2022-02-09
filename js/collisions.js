@@ -4,7 +4,7 @@
 let Cd = 0; // experiment with value of Cd to get good drag later
 let Density = 0.8; // tweak this too
 let grav = 1; // also tweak this
-function calculatePhysics(a = []) {
+export function calculatePhysics(a = []) {
     // a = array
 
     

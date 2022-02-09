@@ -2,8 +2,8 @@ let canvas = document.querySelector('canvas');
 let ctx = canvas.getContext('2d');
 canvas.width = 960;
 canvas.height = 720;
-canvasW = canvas.width;
-canvasH = canvas.height;
+
+import { calculatePhysics } from "./collisions.js";
 
 // new class for generic object person thing umm
 
