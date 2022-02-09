@@ -12,30 +12,30 @@ export function calculateArray(a = []) {
 }
 
 export function calcPhysics(e) {
-     // ok this  is just accelerating it to infinity // needs tweaking // Cd is 0 right now to ignore this
-        // e.Fx = Cd * ((Density * e.Vx) / 2) * (e.width * e.height);
-        // e.Fy = Cd * ((Density * e.Vy) / 2) * (e.width * e.height);
-        e.Vx = e.Vx * 0.90;
-        e.Vy = e.Vy * 0.99;
-        e.Vy += grav;
+    // ok this  is just accelerating it to infinity // needs tweaking // Cd is 0 right now to ignore this
+    // e.Fx = Cd * ((Density * e.Vx) / 2) * (e.width * e.height);
+    // e.Fy = Cd * ((Density * e.Vy) / 2) * (e.width * e.height);
+    e.Vx = e.Vx * 0.90;
+    e.Vy = e.Vy * 0.99;
+    e.Vy += grav;
 
 
-        e.y += e.Vy;
-        e.x += e.Vx;
+    e.y += e.Vy;
+    e.x += e.Vx;
 
-        // boundaries right / left
-        // TWEAK THIS TOO!
-        if (e.x + e.width >= 600) {
-            e.x = 600 - e.Vx;
-            e.Vx = -e.Vx * 1; // only keeping the bounce if needed for later but for now its multiplied by zero
-        } else if (e.x - e.width <= 0) {
-            e.x = e.width;
-            e.Vx = -e.Vx * 1;
-        }
-        //floor
-        if (e.y + e.height >= canvas.height) {
-            e.y = canvas.height - e.height;
-            e.Vy = -e.Vy * 0.5; // maybe add bounce IF knocked out or whatever 
-        };
+    // boundaries right / left
+    // TWEAK THIS TOO!
+    if (e.x + e.width >= 600) {
+        e.x = 600 - e.Vx;
+        e.Vx = -e.Vx * 1; // only keeping the bounce if needed for later but for now its multiplied by zero
+    } else if (e.x - e.width <= 0) {
+        e.x = e.width;
+        e.Vx = -e.Vx * 1;
+    }
+    //floor
+    if (e.y + e.height >= canvas.height) {
+        e.y = canvas.height - e.height;
+        e.Vy = -e.Vy * 0.5; // maybe add bounce IF knocked out or whatever 
+    };
 
 }
