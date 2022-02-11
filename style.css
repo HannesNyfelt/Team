@@ -5,9 +5,14 @@
 }
 
 body {
-    background-size: 6px;
-    background-image: url(./misc-images/placeholder.png); 
+    background-size: 60px;
+    background-image: url(./misc-images/placeholder4.png); 
     /* placeholder background image */
+}
+
+.hide  {
+    position: absolute;
+    top:-2000px;
 }
 
 #container {
