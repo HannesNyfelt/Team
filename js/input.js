@@ -19,5 +19,9 @@ export const keyCodes = {
     arrowLeft: 37,
     arrowUp: 38,
     arrowRight: 39,
-    arrowDown: 40
+    arrowDown: 40,
+    W: 87,
+    A: 65,
+    S: 83,
+    D: 68
 };

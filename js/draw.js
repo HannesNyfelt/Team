@@ -6,7 +6,7 @@
 import { ctx,canvas } from "./main.js";
 
 class Sprite {
-    constructor(image,x,y,sizeX,sizeY,frames,speed) {
+    constructor(image,x,y,sizeX,sizeY,frames,speed,scaleX,scaleY) {
         this.image = image;
         this.x = x;
         this.y = y;
@@ -16,6 +16,8 @@ class Sprite {
         this.frameIndex = 0;
         this.speed = speed;
         this.speedCount = 0;
+        this.scaleX = scaleX;
+        this.scaleY = scaleY;
     }
 
 }
@@ -27,32 +29,32 @@ function imgLoad(images) {
     }
 }
 
-let images = [
-    "idle-player.png"
-]
+// let images = [
+//     "idle-player.png"
+// ]
 
-window.images = images;
+// window.images = images;
 
-window.onload = () => {
-    imgLoad(images);
-}
+// // window.onload = () => {
+// //     imgLoad(images);
+// // }
 
 const sprites = [
-    new Sprite("idle-player.png",0,0,64,64,12,24)
+    new Sprite("player",-23,0,64,64,12,24,1.3,1.3)
 ];
 
 export function drawSprite(creature) {
     let sprite = sprites[creature.sprite];
     ctx.drawImage(
-         document.getElementById('idle-player'),
+         document.getElementById(sprite.image),
          sprite.frameIndex * sprite.sizeX,
-         sprite.y,
+         0,
          sprite.sizeX,
          sprite.sizeY,
          sprite.x  + creature.x,
          sprite.y  + creature.y,
-         sprite.sizeX,
-         sprite.sizeY
+         sprite.sizeX * sprite.scaleX,
+         sprite.sizeY * sprite.scaleY
         );
         if (sprite.frameIndex < sprite.frames - 1) {   
             sprite.frameIndex++;
