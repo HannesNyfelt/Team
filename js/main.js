@@ -6,15 +6,15 @@ canvas.height = 720;
 import { drawSprite } from "./draw.js";
 import { calcPhysics, calculateArray } from "./phys.js";
 import { updatePlayer } from "./player.js";
+import { hitbox,calculateHitboxes } from "./attack.js";
 
 // new class for generic object person thing umm
 class Creature {
-    constructor(x, y, width, height, sprite, hitOffsetX, hitOffsetY, AxOffset, AyOffset, Ax, Ay, damage, knockback, knockbackMult, speed, jumpHeight, health) {
+    constructor(x, y, width, height, sprite, hitOffsetX, hitOffsetY, AxOffset, AyOffset, Ax, Ay, damage, knockback, knockbackMult, speed, jumpHeight, health,delay = 16) {
         this.x = x; //  x/y position for initial spawn
         this.y = y;
         this.Vx = 10; // won't need to change velocity at spawn ?
         this.Vy = 0;
-        //this.sprite = array[sprite].sprite;  // make an array with objects for each sprite with basic things like what sprite it uses and other things 
         this.width = width; //  width/height is creature size (make sure it's correct with what sprite you use)
         this.height = height;
         this.hitOffsetX = hitOffsetX; //  hitOffset is x/y offset of the hitbox
@@ -34,57 +34,67 @@ class Creature {
         this.stunned = false; // if stunned or not
         this.state = "idle"; // state is for what state you are in // like umm you can only attack down while in the air
         this.bounceFactor = 0; // BOUNCE FACTOR
+        this.frameIndex = 0;
+        this.delay = delay;
         // this.direction = 0; // 0 left, 1 up, 2 right, 3 down // for attack direction
     }
 }
-// Very Incredibly temporary physics test
-let test = [
-    new Creature(0, 80, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 60, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 40, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 20, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 80, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 60, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 40, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 20, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 80, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 60, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 40, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 20, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 80, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 60, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 40, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 20, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 80, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 60, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 40, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 20, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 80, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 60, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 40, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 20, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3),
-    new Creature(0, 0, 10, 10, 0, 0, 0, 0, 0, 10, 1, 1, 1, 1, 3)
+
+let player = new Creature(0, 0, 40, 80, 0, 30, 30, 40, 0, 60, 80,10);
+export let enemyArray = [
+    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 20, 80,60),
+    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 40, 80,60),
+    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 10, 80,60),
+    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 30, 80,60),
+    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 70, 80,60),
+    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 60, 80,60),
+    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 60, 80,60)
 ]
-
-window.test = test;
-
-let player = new Creature(0, 0, 40, 80, 0, 30, 30, 40, 0, 60, 80)
 
 
 let gameloop = setInterval(() => {
-    calculateArray(test);
-    ctx.fillStyle = "#FFFFFF";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#000000";
-    test.forEach(e => {
-        ctx.fillRect(e.x, e.y, e.width, e.height)
-    });
-    updatePlayer(player);
-    ctx.fillStyle= "#cc0000";
-    ctx.globalAlpha = 0.5;
-    ctx.fillRect(player.x,player.y, player.width, player.height);
-    ctx.globalAlpha = 1;
-    drawSprite(player);
+    clearScreen();
+    updateObjects();    
+drawObjects();
 }, 16.66);
 
 gameloop;
+
+function clearScreen() {
+    ctx.fillStyle = "#eeeccc";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+}
+
+function updateObjects() {
+   updateEnemies(enemyArray); // not a function yet lol
+    calculateArray(enemyArray);
+    updatePlayer(player);
+    calculateHitboxes();
+    calcPhysics(player);
+}
+
+function drawObjects() {
+    // also temp while fixing draw sprite function
+    enemyArray.forEach(e => {
+        ctx.fillStyle = "#Fcc000"
+        ctx.fillRect(e.x,e.y,e.width,e.height);
+        drawSprite(e);
+        // hitbox(e,0);
+        // hitbox(e,1);
+        // hitbox(e,2);
+        // hitbox(e,3);
+    });
+    ctx.fillStyle = "#000EEe"
+    // ctx.fillRect(player.x,player.y,player.width,player.height);
+    drawSprite(player);
+}
+
+
+function updateEnemies(array) {
+    array.forEach(e => {
+        e.Vx += (Math.random() * 10) - 5;
+        if (Math.random() >= 0.95) {
+            e.Vy -= (Math.random() * 30);
+        }
+    });
+}
