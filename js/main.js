@@ -1,6 +1,6 @@
 export let canvas = document.querySelector('canvas');
 export let ctx = canvas.getContext('2d');
-let score = 0;
+let score = 20;
 canvas.width = 960;
 canvas.height = 720;
 
@@ -62,7 +62,7 @@ function drawScreen() {
     ctx.fillRect(24,24,Math.max(200 * (player.health / 200),0) ,24);
     ctx.font = "30px Arial";
     ctx.fillStyle = "#000000"
-    ctx.fillText(`Score : ${score  * 100}`, canvas.width/1.4, 50); 
+    ctx.fillText(`Score : ${Math.round(score  * 100)}`, canvas.width/1.4, 50); 
     
 }
 
@@ -86,7 +86,7 @@ function drawObjects() {
     enemyArray.forEach(e => {
         ctx.fillStyle = "#Fcc000"
         
-        ctx.fillRect(e.x,e.y,e.width,e.height);
+        // ctx.fillRect(e.x,e.y,e.width,e.height);
         
         drawSprite(e);
         // hitbox(e,0);
@@ -99,32 +99,33 @@ function drawObjects() {
     drawSprite(player);
 }
 
-export function scoreup() {
-    score++;
+export function scoreup(e) {
+    score += 1 + ((-e) * 0.1);
 };
 
 function updateEnemies(array) {
     array.forEach(e => {
         if (!e.stunned) {
             
-            if (e.x <= player.x) {
+            if (e.x <= player.x + 50) {
                 e.Vx += Math.random() * 0.5;
-            } else {
+            }
+            if (e.x >= player.x - 50) {
                 e.Vx -= Math.random() * 0.5;
             }
             e.delay--;
             if (e.delay <= 0) {
                 if (!player.grounded) {
                     hitbox(e,0);
-                    e.delay = 100;
+                    e.delay = 100 + (Math.random() * 10);
                 }else {
                     if (e.x <= player.x + 100 && e.x >= player.x) {
                         hitbox(e,1);
-                        e.delay = 100;
+                        e.delay = 100 + (Math.random() * 10);
                     }
                     if (e.x >= player.x - 100 && e.x <= player.x) {
                         hitbox(e,3);
-                        e.delay = 100;
+                        e.delay = 100 + (Math.random() * 10);
                     }
                 }
             }
@@ -138,7 +139,9 @@ function spawnEnemies() {
         
         
         for (let i = 0; i < Math.max(Math.round(score/4),1); i++) {
-            enemyArray.push(new Creature( Math.random() * 600,-100, 40, 80, 1, 30, 30, 40, 0, 20, 80,60,10,1,1,1,3,100 + (Math.random() * 10)))
+            let enemy = new Creature( Math.random() * 600,-100  - (Math.random() * 50), 40, 80, 1, 30, 30, 40, 0, 20, 80,60,10,1,1,1,3,100 + (Math.random() * 10));
+            enemy.frameIndex = Math.floor(Math.random()*15);
+            enemyArray.push(enemy)
         }
         delay = 500;
     } else {

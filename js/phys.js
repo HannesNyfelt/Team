@@ -12,7 +12,7 @@ export function calculateArray(a = []) {
         calcPhysics(element);
         if (element.grounded && element.health <= 0) {
             a.splice(index,1);
-            scoreup();
+            scoreup(element.health);
         }
     });
 }

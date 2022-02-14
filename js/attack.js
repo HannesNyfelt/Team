@@ -61,11 +61,12 @@ export function calculateHitboxes() {
                     obj.Vy += yDir;
                     obj.grounded = false;
                     obj.stunned = true;
+                    obj.bounceFactor = 1;
                     if (e.direction == 2) {
                         obj.health -= 1;
-                        console.log(obj.health);
+                        obj.bounceFactor = 0.9;
+                        player.Vy = Math.min(player.Vy,-10);
                     }
-                    obj.bounceFactor = 1;
                 }
             });
         } else {
