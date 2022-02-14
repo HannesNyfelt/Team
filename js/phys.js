@@ -2,7 +2,7 @@
 // maybe more knockback upwards and a bit less to the sides so you can more easily chain attacks by hitting them when they fall down again ?
 let Cd = 0.102; // experiment with value of Cd to get good drag later
 let Density = 0.2; // tweak this too
-let grav = 2; // also tweak this
+let grav = 0.5; // also tweak this
 export function calculateArray(a = []) {
     // a = array
     a.forEach(element => {
@@ -24,11 +24,11 @@ export function calcPhysics(e) {
 
     // boundaries right / left
     // TWEAK THIS TOO!
-    if (e.x + e.width >= 1960) {
-        e.x = 1960 - e.width;
+    if (e.x + e.width >= 960) {
+        e.x = 960 - e.width;
         e.Vx = -e.Vx * 0.5;
-    } else if (e.x <= -1000) {
-        e.x = -1000;
+    } else if (e.x <= 0) {
+        e.x = 0;
         e.Vx = -e.Vx * 0.5;
     }
     //floor

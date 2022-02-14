@@ -40,14 +40,15 @@ function imgLoad(images) {
 // // }
 
 const sprites = [
-    new Sprite("player",-23,0,64,64,12,24,1.3,1.3)
+    new Sprite("player",-23,0,64,64,12,24,1.3,1.3),
+    new Sprite("enemy",-23,0,64,64,16,24,1.3,1.3),
 ];
 
 export function drawSprite(creature) {
     let sprite = sprites[creature.sprite];
     ctx.drawImage(
          document.getElementById(sprite.image),
-         sprite.frameIndex * sprite.sizeX,
+         creature.frameIndex * sprite.sizeX,
          0,
          sprite.sizeX,
          sprite.sizeY,
@@ -56,10 +57,10 @@ export function drawSprite(creature) {
          sprite.sizeX * sprite.scaleX,
          sprite.sizeY * sprite.scaleY
         );
-        if (sprite.frameIndex < sprite.frames - 1) {   
-            sprite.frameIndex++;
+        if (creature.frameIndex < sprite.frames - 1) {   
+            creature.frameIndex++;
         } else {
-            sprite.frameIndex = 0
+            creature.frameIndex = 0
         };
 };
 

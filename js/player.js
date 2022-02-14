@@ -9,9 +9,9 @@ export function updatePlayer(player) {
 
     if (getKey(keyCodes.arrowUp)) {
         if (player.grounded) {   
-            player.Vy += -10;
+            player.Vy -= 8;
             player.grounded = false;
-            extrajump = 10;
+            extrajump = 4;
         }
         player.Vy += -extrajump;
         if (extrajump * 0.7 >= 0.2) {
@@ -30,16 +30,24 @@ export function updatePlayer(player) {
         player.state = "right";
     }
 
-    
-    if(getKey(keyCodes.W)) {
-        hitbox(player,0);
-    } else if(getKey(keyCodes.A)) {
-        hitbox(player,1);
-    } else if(getKey(keyCodes.S)) {
-        hitbox(player,2);
-    } else if(getKey(keyCodes.D)) {
-        hitbox(player,3);
-    } 
+
+
+    player.delay--;
+    if (player.delay <= 0) {
+        if(getKey(keyCodes.W)) {
+            hitbox(player,0);
+            player.delay = 10;
+        } else if(getKey(keyCodes.A)) {
+            hitbox(player,1);
+            player.delay = 10;
+        } else if(getKey(keyCodes.S)) {
+            hitbox(player,2);
+            player.delay = 10;
+        } else if(getKey(keyCodes.D)) {
+            hitbox(player,3);
+            player.delay = 10;
+        } 
+    }
 
     // if (player.y > 450 - player.height) {
     //     player.y = 450 - player.height;
