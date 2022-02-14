@@ -9,9 +9,9 @@ export function updatePlayer(player) {
 
     if (getKey(keyCodes.arrowUp)) {
         if (player.grounded) {   
-            player.Vy += -10;
+            player.Vy -= 8;
             player.grounded = false;
-            extrajump = 10;
+            extrajump = 4;
         }
         player.Vy += -extrajump;
         if (extrajump * 0.7 >= 0.2) {

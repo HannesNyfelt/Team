@@ -40,7 +40,7 @@ class Creature {
     }
 }
 
-let player = new Creature(0, 0, 40, 80, 0, 30, 30, 40, 0, 60, 80,10);
+let player = new Creature(0, 0, 40, 80, 0, 30, 30, 40, 0, 80, 120,10);
 export let enemyArray = [
     new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 20, 80,60),
     new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 40, 80,60),
@@ -92,9 +92,9 @@ function drawObjects() {
 
 function updateEnemies(array) {
     array.forEach(e => {
-        e.Vx += (Math.random() * 10) - 5;
         if (Math.random() >= 0.95) {
-            e.Vy -= (Math.random() * 30);
+            e.Vx += (Math.random() * 10) - 5;
+            // e.Vy -= (Math.random() * 30);
         }
     });
 }

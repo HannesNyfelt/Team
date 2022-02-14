@@ -2,7 +2,7 @@
 // maybe more knockback upwards and a bit less to the sides so you can more easily chain attacks by hitting them when they fall down again ?
 let Cd = 0.102; // experiment with value of Cd to get good drag later
 let Density = 0.2; // tweak this too
-let grav = 1.5; // also tweak this
+let grav = 0.5; // also tweak this
 export function calculateArray(a = []) {
     // a = array
     a.forEach(element => {
