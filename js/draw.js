@@ -42,10 +42,16 @@ function imgLoad(images) {
 const sprites = [
     new Sprite("player",-23,0,64,64,12,24,1.3,1.3),
     new Sprite("enemy",-23,0,64,64,16,24,1.3,1.3),
+    new Sprite("dead",-23,30,64,64,1,24,1.3,1.3),
 ];
 
 export function drawSprite(creature) {
-    let sprite = sprites[creature.sprite];
+    let sprite;
+    if (creature.stunned) {
+       sprite = sprites[2];
+    } else {
+    sprite = sprites[creature.sprite];
+    }
     ctx.drawImage(
          document.getElementById(sprite.image),
          creature.frameIndex * sprite.sizeX,

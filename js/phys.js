@@ -1,12 +1,18 @@
 // https://www.grc.nasa.gov/WWW/k-12/airplane/drageq.html ? will probably work with some tweaking
+
+import { enemyArray } from "./main.js";
+
 // maybe more knockback upwards and a bit less to the sides so you can more easily chain attacks by hitting them when they fall down again ?
 let Cd = 0.102; // experiment with value of Cd to get good drag later
 let Density = 0.2; // tweak this too
 let grav = 0.5; // also tweak this
 export function calculateArray(a = []) {
     // a = array
-    a.forEach(element => {
+    a.forEach((element,index) => {
         calcPhysics(element);
+        if (element.grounded && element.health <= 0) {
+            a.splice(index,1);
+        }
     });
 }
 
@@ -37,6 +43,7 @@ export function calcPhysics(e) {
         if (e.y + e.height >= canvas.height) {
             e.y = canvas.height - e.height;
             if (e.stunned == true) {
+
                 e.bounceFactor /= 1.3;
                 if (e.bounceFactor <= 0.1) {
                     e.bounceFactor = 0;

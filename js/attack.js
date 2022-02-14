@@ -1,23 +1,26 @@
-import { ctx,canvas, enemyArray } from "./main.js";
+import { ctx,canvas, enemyArray, player } from "./main.js";
 
 let hitboxes = [];
 
 export function hitbox(ent,direction) {
     ctx.fillStyle = "#00cc00"
-    let hit = {
-        x:      ent.x + ent.AxOffset - (direction == 1 ? ent.Ax + ent.width : (direction == 2 || direction == 0 ? (ent.Ax + ent.width)/2 : 0)),
-        y:      ent.y + ent.AyOffset - (direction == 0 ? ent.Ay - 20 : (direction == 2 && !ent.grounded ? -ent.Ay/2 : 0)),
-        width:     ent.Ax,
-        height:    ent.Ay,
-        direction: direction,
-        type:      ent.sprite,
-        knockback: ent.knockback,
-        damage:    ent.damage
+    if (!(direction == 2 && ent.grounded)) {
+        
+        let hit = {
+            x:      ent.x + ent.AxOffset - (direction == 1 ? ent.Ax + ent.width : (direction == 2 || direction == 0 ? (ent.Ax + ent.width)/2 : 0)),
+            y:      ent.y + ent.AyOffset - (direction == 0 ? ent.Ay - 20 : (direction == 2 && !ent.grounded ? -ent.Ay/2 : 0)),
+            width:     ent.Ax,
+            height:    ent.Ay,
+            direction: direction,
+            type:      ent.sprite,
+            knockback: ent.knockback,
+            damage:    ent.damage
+        }
+        
+        ctx.fillRect(hit.x,hit.y,hit.width,hit.height);
+        
+        hitboxes.push(hit);
     }
-
- ctx.fillRect(hit.x,hit.y,hit.width,hit.height);
-
- hitboxes.push(hit);
 //  window.hitboxes = hitboxes;
 }
 
@@ -26,13 +29,12 @@ export function calculateHitboxes() {
         if (e.type == 0) {
             enemyArray.forEach(obj => { 
                 if (checkCollision(obj,e)) {
-                    console.log("A");
                     let xDir = 0;
                     let yDir = 0;
                     switch (e.direction) {
                         case 0:
                             //up
-                            xDir = 0;
+                            xDir = (Math.random() * 15) - 7.5;
                             yDir = -20;
                         break;
                         case 1:
@@ -55,14 +57,23 @@ export function calculateHitboxes() {
                             yDir = 0;
                             break;
                     }
-                    console.log(xDir,yDir);
                     obj.Vx += xDir;
                     obj.Vy += yDir;
+                    obj.grounded = false;
                     obj.stunned = true;
+                    if (e.direction == 2) {
+                        obj.health -= 1;
+                        console.log(obj.health);
+                    }
                     obj.bounceFactor = 1;
-                    console.log(obj.Vx);
                 }
             });
+        } else {
+            if (checkCollision(player,e)) {
+            player.Vy -= 10;
+            player.health -= 10;
+            player.grounded = false;
+            }
         }
     });
     hitboxes = [];

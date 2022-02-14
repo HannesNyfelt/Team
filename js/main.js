@@ -40,29 +40,34 @@ class Creature {
     }
 }
 
-let player = new Creature(0, 0, 40, 80, 0, 30, 30, 40, 0, 80, 120,10);
+export let player = new Creature(200, 0, 40, 80, 0, 30, 30, 40, 0, 80, 120,10,1,1,1,1,200);
 export let enemyArray = [
-    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 20, 80,60),
-    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 40, 80,60),
-    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 10, 80,60),
-    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 30, 80,60),
-    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 70, 80,60),
-    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 60, 80,60),
-    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 60, 80,60)
+    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 20, 80,60,10,1,1,1,3,100),
+    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 40, 80,60,10,1,1,1,3,100),
+    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 10, 80,60,10,1,1,1,3,100),
+    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 30, 80,60,10,1,1,1,3,100),
+    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 70, 80,60,10,1,1,1,3,100),
+    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 60, 80,60,10,1,1,1,3,100),
+    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 60, 80,60,10,1,1,1,3,100)
 ]
 
 
 let gameloop = setInterval(() => {
-    clearScreen();
+    drawScreen();
     updateObjects();    
 drawObjects();
 }, 16.66);
 
 gameloop;
 
-function clearScreen() {
+function drawScreen() {
     ctx.fillStyle = "#eeeccc";
     ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(24,24,200,24);
+    ctx.fillStyle = "#FF0000";
+    ctx.fillRect(24,24,Math.max(200 * (player.health / 200),0) ,24);
+    
 }
 
 function updateObjects() {
@@ -71,13 +76,21 @@ function updateObjects() {
     updatePlayer(player);
     calculateHitboxes();
     calcPhysics(player);
+    if (player.health <= 0) {
+        clearInterval(gameloop);
+        ctx.font = "30px Arial";
+        ctx.fillStyle = "#FFa000"
+        ctx.fillText("game over!", canvas.width/2, 50); 
+    }
 }
 
 function drawObjects() {
     // also temp while fixing draw sprite function
     enemyArray.forEach(e => {
         ctx.fillStyle = "#Fcc000"
+
         ctx.fillRect(e.x,e.y,e.width,e.height);
+
         drawSprite(e);
         // hitbox(e,0);
         // hitbox(e,1);
@@ -92,9 +105,29 @@ function drawObjects() {
 
 function updateEnemies(array) {
     array.forEach(e => {
-        if (Math.random() >= 0.95) {
-            e.Vx += (Math.random() * 10) - 5;
-            // e.Vy -= (Math.random() * 30);
+        if (!e.stunned) {
+            
+            if (e.x <= player.x) {
+                e.Vx += Math.random() * 0.5;
+            } else {
+                e.Vx -= Math.random() * 0.5;
+            }
+            e.delay--;
+            if (e.delay <= 0) {
+                if (!player.grounded) {
+                    hitbox(e,0);
+                    e.delay = 100;
+                }else {
+                    if (e.x <= player.x + 100 && e.x >= player.x) {
+                        hitbox(e,1);
+                        e.delay = 100;
+                    }
+                    if (e.x >= player.x - 100 && e.x <= player.x) {
+                        hitbox(e,3);
+                        e.delay = 100;
+                    }
+                }
+            }
         }
     });
 }
