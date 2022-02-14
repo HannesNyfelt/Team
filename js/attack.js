@@ -39,17 +39,17 @@ export function calculateHitboxes() {
                         break;
                         case 1:
                             //left
-                            xDir = -15;
+                            xDir = -25;
                             yDir = -20;
                         break;
                         case 2:
                             //down
-                            xDir = 0;
+                            xDir = (Math.random() * 30) - 15;
                             yDir = 50;
                         break;
                         case 3:
                             //right
-                            xDir = 15;
+                            xDir = 25;
                             yDir = -20;
                         break;
                         default:

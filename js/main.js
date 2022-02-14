@@ -1,5 +1,6 @@
 export let canvas = document.querySelector('canvas');
 export let ctx = canvas.getContext('2d');
+let score = 0;
 canvas.width = 960;
 canvas.height = 720;
 
@@ -41,21 +42,13 @@ class Creature {
 }
 
 export let player = new Creature(200, 0, 40, 80, 0, 30, 30, 40, 0, 80, 120,10,1,1,1,1,200);
-export let enemyArray = [
-    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 20, 80,60,10,1,1,1,3,100),
-    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 40, 80,60,10,1,1,1,3,100),
-    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 10, 80,60,10,1,1,1,3,100),
-    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 30, 80,60,10,1,1,1,3,100),
-    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 70, 80,60,10,1,1,1,3,100),
-    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 60, 80,60,10,1,1,1,3,100),
-    new Creature(0, 0, 40, 80, 1, 30, 30, 40, 0, 60, 80,60,10,1,1,1,3,100)
-]
+export let enemyArray = [];
 
 
 let gameloop = setInterval(() => {
     drawScreen();
     updateObjects();    
-drawObjects();
+    drawObjects();
 }, 16.66);
 
 gameloop;
@@ -67,11 +60,15 @@ function drawScreen() {
     ctx.fillRect(24,24,200,24);
     ctx.fillStyle = "#FF0000";
     ctx.fillRect(24,24,Math.max(200 * (player.health / 200),0) ,24);
+    ctx.font = "30px Arial";
+    ctx.fillStyle = "#000000"
+    ctx.fillText(`Score : ${score  * 100}`, canvas.width/1.4, 50); 
     
 }
 
 function updateObjects() {
-   updateEnemies(enemyArray); // not a function yet lol
+    spawnEnemies();
+    updateEnemies(enemyArray); // not a function yet lol
     calculateArray(enemyArray);
     updatePlayer(player);
     calculateHitboxes();
@@ -88,9 +85,9 @@ function drawObjects() {
     // also temp while fixing draw sprite function
     enemyArray.forEach(e => {
         ctx.fillStyle = "#Fcc000"
-
+        
         ctx.fillRect(e.x,e.y,e.width,e.height);
-
+        
         drawSprite(e);
         // hitbox(e,0);
         // hitbox(e,1);
@@ -102,6 +99,9 @@ function drawObjects() {
     drawSprite(player);
 }
 
+export function scoreup() {
+    score++;
+};
 
 function updateEnemies(array) {
     array.forEach(e => {
@@ -130,4 +130,18 @@ function updateEnemies(array) {
             }
         }
     });
+}
+
+let delay = 0;
+function spawnEnemies() {
+    if (delay <= 0) {
+        
+        
+        for (let i = 0; i < Math.max(Math.round(score/4),1); i++) {
+            enemyArray.push(new Creature( Math.random() * 600,-100, 40, 80, 1, 30, 30, 40, 0, 20, 80,60,10,1,1,1,3,100 + (Math.random() * 10)))
+        }
+        delay = 500;
+    } else {
+        delay--;
+    }
 }
