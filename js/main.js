@@ -1,6 +1,6 @@
 export let canvas = document.querySelector('canvas');
 export let ctx = canvas.getContext('2d');
-let score = 20;
+let score = 0;
 canvas.width = 960;
 canvas.height = 720;
 
